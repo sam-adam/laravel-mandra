@@ -1,0 +1,20 @@
+{
+  "name": "sam/Mandra",
+  "description": "Qareer Mandra related",
+  "require": {
+    "illuminate/support": "5.3.*",
+    "illuminate/mail": "^5.3",
+    "nesbot/carbon": "^1.21"
+  },
+  "authors": [
+    {
+      "name": "Samuel",
+      "email": "samuel.suhendra@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Mandra\\": "src/"
+    }
+  }
+}
