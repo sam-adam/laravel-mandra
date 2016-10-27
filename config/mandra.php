@@ -14,5 +14,10 @@ return [
         'dataKeys' => [
             'utmString'
         ]
+    ],
+    'logging'      => [
+        'doLog'      => true,
+        'logContent' => true,
+        'disk'       => 'mandra'
     ]
 ];

@@ -14,6 +14,8 @@ abstract class BaseMail extends Mailable
 {
     /** @var string */
     protected $messageId;
+    /** @var array */
+    protected $logData;
 
     public function __construct()
     {
@@ -26,10 +28,69 @@ abstract class BaseMail extends Mailable
         return $this->messageId;
     }
 
+    /** @return string */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    /** {@inheritDoc} */
+    public function setLogData($logData)
+    {
+        $this->logData = $logData;
+
+        return $this;
+    }
+
     /** {@inheritDoc} */
     protected function buildViewData()
     {
         $data = parent::buildViewData();
+        $utms = $this->getCampaignData($data);
+        $logs = $this->getLogData($data);
+
+        $data['utms']      = $utms;
+        $data['utmString'] = implode('&', $utms);
+        $data['logData']   = $logs;
+
+        return $data;
+    }
+
+    /**
+     * Get data to be logged
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function getLogData(array $data)
+    {
+        $logData = isset($data['logData'])
+            ? $data['logData']
+            : [];
+
+        $logData['mail_type']     = str_replace('/', '.', $this->view);
+        $logData['project']       = config('app.name');
+        $logData['is_production'] = app()->environment() == 'production' ? 1 : 0;
+        $logData['is_loggable']   = true;
+        $logData['message_id']    = $this->messageId;
+        $logData['to']            = $this->to;
+        $logData['subject']       = $this->subject;
+        $logData['cc']            = $this->cc;
+        $logData['reply_to']      = $this->replyTo;
+
+        return $logData;
+    }
+
+    /**
+     * Get campaign related data
+     *
+     * @param array $data
+     *
+     * @return array|mixed
+     */
+    protected function getCampaignData(array $data)
+    {
         $utms = isset($data['utms'])
             ? $data['utms']
             : [];
@@ -61,9 +122,6 @@ abstract class BaseMail extends Mailable
             }
         }
 
-        $data['utms']      = $utms;
-        $data['utmString'] = implode('&', $utms);
-
-        return $data;
+        return $utms;
     }
 }
