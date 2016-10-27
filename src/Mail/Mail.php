@@ -6,32 +6,31 @@ use Carbon\Carbon;
 use Illuminate\Mail\Mailable;
 
 /**
- * Class BaseMail
+ * Class Mail
  *
  * @package App\Mail
  */
-abstract class BaseMail extends Mailable
+abstract class Mail extends Mailable
 {
-    /** @var string */
-    protected $messageId;
     /** @var array */
     protected $logData;
-
-    public function __construct()
-    {
-        $this->messageId = date('YmdHis').uniqid('_');
-    }
-
-    /** @return string */
-    public function getMessageId()
-    {
-        return $this->messageId;
-    }
 
     /** @return string */
     public function getSubject()
     {
         return $this->subject;
+    }
+
+    /** @return array */
+    public function getTo()
+    {
+        return $this->to;
+    }
+
+    /** @return array */
+    public function getCC()
+    {
+        return $this->cc;
     }
 
     /** {@inheritDoc} */
@@ -73,7 +72,6 @@ abstract class BaseMail extends Mailable
         $logData['project']       = config('app.name');
         $logData['is_production'] = app()->environment() == 'production' ? 1 : 0;
         $logData['is_loggable']   = true;
-        $logData['message_id']    = $this->messageId;
         $logData['to']            = $this->to;
         $logData['subject']       = $this->subject;
         $logData['cc']            = $this->cc;

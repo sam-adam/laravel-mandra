@@ -18,6 +18,9 @@ return [
     'logging'      => [
         'doLog'      => true,
         'logContent' => true,
-        'disk'       => 'mandra'
+        'disk'       => 'mandra',
+        'writers'    => [
+            \Mandra\Mail\Log\Writers\ApplicationWriter::class
+        ]
     ]
 ];

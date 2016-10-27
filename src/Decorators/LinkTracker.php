@@ -2,7 +2,7 @@
 
 namespace Mandra\Decorators;
 
-use Illuminate\Mail\Message;
+use Mandra\Mail\Message;
 
 /**
  * Class LinkTracker

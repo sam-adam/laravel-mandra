@@ -2,8 +2,7 @@
 
 namespace Mandra\Decorators;
 
-use Illuminate\Mail\Message;
-use Swift_Mime_Message;
+use Mandra\Mail\Message;
 
 /**
  * Interface Decorator

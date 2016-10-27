@@ -7,11 +7,11 @@ use Mandra\Mail\Mailer;
 use Mandra\Mail\Message;
 
 /**
- * Class MessageSent
+ * Class MessageSendingFailed
  *
  * @package Mandra\Mail\Events
  */
-class MessageSent
+class MessageSendingFailed
 {
     use SerializesModels;
 
