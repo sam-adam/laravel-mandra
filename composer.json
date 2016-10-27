@@ -1,5 +1,5 @@
 {
-  "name": "sam/Mandra",
+  "name": "sam/laravel-mandra",
   "description": "Qareer Mandra related",
   "require": {
     "illuminate/support": "5.3.*",
