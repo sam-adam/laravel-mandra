@@ -1,10 +1,10 @@
 <?php
 
-namespace Mandra\Mail\Events;
+namespace LaravelMandra\Mail\Events;
 
 use Illuminate\Queue\SerializesModels;
-use Mandra\Mail\Mailer;
-use Mandra\Mail\Message;
+use LaravelMandra\Mail\Mailer;
+use LaravelMandra\Mail\Message;
 
 /**
  * Class MessageSent

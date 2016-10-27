@@ -1,6 +1,6 @@
 <?php
 
-namespace Mandra\Mail;
+namespace LaravelMandra\Mail;
 
 use Illuminate\Contracts\Mail\Mailable;
 use Swift_Mailer;
@@ -8,7 +8,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Mail\Mailable as MailableContract;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Mail\Mailer as BaseMailer;
-use Mandra\Decorators\Decorator as DecoratorInterface;
+use LaravelMandra\Decorators\Decorator as DecoratorInterface;
 use Swift_Message;
 
 /**

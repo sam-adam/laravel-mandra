@@ -1,15 +1,15 @@
 <?php
 
-namespace Mandra;
+namespace LaravelMandra;
 
 use Illuminate\Log\Writer;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Mandra\Decorators\Decorator;
-use Mandra\Mail\Events\MessageSent;
-use Mandra\Mail\Log\Logger;
+use LaravelMandra\Decorators\Decorator;
+use LaravelMandra\Mail\Events\MessageSent;
+use LaravelMandra\Mail\Log\Logger;
 
 /**
  * Class ServiceProvider

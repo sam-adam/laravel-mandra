@@ -1,9 +1,9 @@
 <?php
 
-namespace Mandra\Mail\Log;
+namespace LaravelMandra\Mail\Log;
 
-use Mandra\Mail\Mailer;
-use Mandra\Mail\Message;
+use LaravelMandra\Mail\Mailer;
+use LaravelMandra\Mail\Message;
 
 /**
  * Interface LogWriter

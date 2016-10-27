@@ -1,11 +1,11 @@
 <?php
 
-namespace Mandra\Mail\Log;
+namespace LaravelMandra\Mail\Log;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Mandra\Mail\Mailer;
-use Mandra\Mail\Message;
+use LaravelMandra\Mail\Mailer;
+use LaravelMandra\Mail\Message;
 
 /**
  * Class Logger

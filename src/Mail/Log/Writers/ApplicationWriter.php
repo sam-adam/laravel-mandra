@@ -1,11 +1,11 @@
 <?php
 
-namespace Mandra\Mail\Log\Writers;
+namespace LaravelMandra\Mail\Log\Writers;
 
 use Illuminate\Support\Facades\Log;
-use Mandra\Mail\Log\LogWriter;
-use Mandra\Mail\Mailer;
-use Mandra\Mail\Message;
+use LaravelMandra\Mail\Log\LogWriter;
+use LaravelMandra\Mail\Mailer;
+use LaravelMandra\Mail\Message;
 
 /**
  * Class ApplicationWriter

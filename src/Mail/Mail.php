@@ -1,6 +1,6 @@
 <?php
 
-namespace Mandra\Mail;
+namespace LaravelMandra\Mail;
 
 use Carbon\Carbon;
 use Illuminate\Mail\Mailable;

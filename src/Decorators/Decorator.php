@@ -1,8 +1,8 @@
 <?php
 
-namespace Mandra\Decorators;
+namespace LaravelMandra\Decorators;
 
-use Mandra\Mail\Message;
+use LaravelMandra\Mail\Message;
 
 /**
  * Interface Decorator
