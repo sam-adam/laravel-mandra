@@ -28,7 +28,7 @@ class ApplicationWriter implements LogWriter
     }
 
     /**
-     * @param \Mandra\Mail\Mailer $mailer
+     * @param \LaravelMandra\Mail\Mailer $mailer
      *
      * @return array
      */

@@ -96,7 +96,7 @@ abstract class Mail extends Mailable
         $utms['utm_timestamp']  = Carbon::now()->toDateTimeString();
         $utms['utm_source']     = 'email';
         $utms['utm_medium']     = str_replace('/\\', '_', $this->buildView());
-        $utms['utm_message_id'] = $this->messageId;
+        //$utms['utm_message_id'] = $this->messageId;
 
         if ($this->to) {
             $utms['utm_recipients'] = implode(',', array_keys($this->to));

@@ -96,7 +96,6 @@ class ServiceProvider extends BaseServiceProvider
                 $mailer->setQueue($app['queue']);
             }
 
-
             $from = $app['config']['mail.from'];
 
             if (is_array($from) && isset($from['address'])) {
@@ -127,6 +126,14 @@ class ServiceProvider extends BaseServiceProvider
         $this->publishes([
             __DIR__.'/../config/mandra.php' => config_path('mandra.php')
         ]);
+
+        if (config('mandra.allowController')) {
+            if (!$this->app->routesAreCached()) {
+                require __DIR__.'/../routes.php';
+            }
+
+            $this->loadViewsFrom(__DIR__.'/../resources/views', 'mandra');
+        }
 
         if ($this->app['config']['mandra.logging.doLog']) {
             Event::listen(MessageSent::class, function (MessageSent $event) {
