@@ -2,8 +2,8 @@
 
 return [
     'decorators'   => [
-        \Mandra\Decorators\LinkTracker::class,
-        \Mandra\Decorators\PixelTracker::class
+        \LaravelMandra\Decorators\LinkTracker::class,
+        \LaravelMandra\Decorators\PixelTracker::class
     ],
     'clickTracker' => [
         'link' => '',
@@ -20,7 +20,7 @@ return [
         'logContent' => true,
         'disk'       => 'mandra',
         'writers'    => [
-            \Mandra\Mail\Log\Writers\ApplicationWriter::class
+            \LaravelMandra\Mail\Log\Writers\ApplicationWriter::class
         ]
     ]
 ];
