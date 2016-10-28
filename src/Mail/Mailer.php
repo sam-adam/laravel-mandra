@@ -2,7 +2,7 @@
 
 namespace LaravelMandra\Mail;
 
-use Illuminate\Contracts\Mail\Mailable;
+use LaravelMandra\Decorators\Decorator;
 use Swift_Mailer;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Mail\Mailable as MailableContract;
@@ -28,6 +28,20 @@ class Mailer extends BaseMailer
         parent::__construct($views, $swift, $events);
     }
 
+    /**
+     * Add a decorator
+     *
+     * @param Decorator $decorator
+     *
+     * @return $this
+     */
+    public function addDecorator(DecoratorInterface $decorator)
+    {
+        $this->decorators[] = $decorator;
+
+        return $this;
+    }
+
     /** {@inheritDoc} */
     protected function createMessage()
     {
@@ -44,7 +58,7 @@ class Mailer extends BaseMailer
     public function send($view, array $data = [], $callback = null)
     {
         if ($view instanceof MailableContract) {
-            $view->send($this);
+            return $view->send($this);
         }
 
         list($view, $plain, $raw) = $this->parseView($view);

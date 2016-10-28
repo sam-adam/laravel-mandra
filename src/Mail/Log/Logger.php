@@ -40,7 +40,7 @@ class Logger
      */
     public function log(Message $message, Mailer $mailer, $result, array $messageData = [])
     {
-        if ($this->doLogContent) {
+        if ($this->doLogContent && $this->filesystem) {
             $this->logContent($message);
         }
 

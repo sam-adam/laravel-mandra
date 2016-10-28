@@ -3,13 +3,14 @@
 namespace LaravelMandra;
 
 use Illuminate\Log\Writer;
-use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Illuminate\Mail\MailServiceProvider as BaseServiceProvider;
 use LaravelMandra\Decorators\Decorator;
+use LaravelMandra\Mail\Events\MessageSendingFailed;
 use LaravelMandra\Mail\Events\MessageSent;
 use LaravelMandra\Mail\Log\Logger;
+use LaravelMandra\Mail\Mailer;
 
 /**
  * Class ServiceProvider
@@ -18,8 +19,6 @@ use LaravelMandra\Mail\Log\Logger;
  */
 class ServiceProvider extends BaseServiceProvider
 {
-    /** @var Mailer */
-    protected $originalMailer;
 
     /**
      * Register the application services.
@@ -28,8 +27,10 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
+        $this->registerSwiftMailer();
+
         // register mail content decorators
-        $this->app->bindIf('mandra.decorators', function ($app) {
+        $this->app->bind('mandra.decorators', function ($app) {
             $decorators = [];
 
             /** @var Decorator $decorator */
@@ -37,7 +38,7 @@ class ServiceProvider extends BaseServiceProvider
                 $interfaces = class_implements($decorator);
 
                 if (is_array($interfaces) && in_array(Decorator::class, $interfaces)) {
-                    array_push($decorators, $app->make($decorator));
+                    array_push($decorators, $decorator);
                 }
             }
 
@@ -45,7 +46,7 @@ class ServiceProvider extends BaseServiceProvider
         });
 
         // register mail log writers
-        $this->app->bindIf('mandra.log.writers', function ($app) {
+        $this->app->bind('mandra.log.writers', function ($app) {
             $writers = [];
 
             /** @var Writer $writer */
@@ -62,7 +63,7 @@ class ServiceProvider extends BaseServiceProvider
 
         // register filesystem implementation
         $this->app->singleton('mandra.logger.filesystem', function ($app) {
-            if ($disk = $app['config']['mandra.logger.disk']) {
+            if ($disk = $app['config']['mandra.logging.disk']) {
                 $filesystem = Storage::disk($disk);
 
                 if ($filesystem) {
@@ -76,7 +77,7 @@ class ServiceProvider extends BaseServiceProvider
         // register the logger
         $this->app->singleton('mandra.logger', function ($app) {
             return new Logger(
-                $app['config']['mandra.logging.writers'],
+                $app['mandra.log.writers'],
                 $app['mandra.logger.filesystem'],
                 $app['config']['mandra.logging.logContent']
             );
@@ -85,8 +86,8 @@ class ServiceProvider extends BaseServiceProvider
         // override mailer
         $this->app->singleton('mailer', function ($app) {
             $mailer = new Mailer(
-                $this->originalMailer->getViewFactory(),
-                $this->originalMailer->getSwiftMailer(),
+                $app['view'],
+                $app['swift.mailer'],
                 $app['events']
             );
             $mailer->setContainer($app);
@@ -108,6 +109,10 @@ class ServiceProvider extends BaseServiceProvider
                 $mailer->alwaysTo($to['address'], $to['name']);
             }
 
+            foreach ($app['mandra.decorators'] as $decorator) {
+                $mailer->addDecorator($app->make($decorator));
+            }
+
             return $mailer;
         });
     }
@@ -123,15 +128,26 @@ class ServiceProvider extends BaseServiceProvider
             __DIR__.'/../config/mandra.php' => config_path('mandra.php')
         ]);
 
-        $this->originalMailer = $this->app['mailer'];
-
-        if ($this->app['config']['mandra.doLog']) {
+        if ($this->app['config']['mandra.logging.doLog']) {
             Event::listen(MessageSent::class, function (MessageSent $event) {
                 /** @var Logger $logger */
                 $logger = $this->app['mandra.logger'];
 
                 $logger->log($event->getMessage(), $event->getMailer(), true, $event->getMessageData());
             });
+
+            Event::listen(MessageSendingFailed::class, function (MessageSendingFailed $event) {
+                /** @var Logger $logger */
+                $logger = $this->app['mandra.logger'];
+
+                $logger->log($event->getMessage(), $event->getMailer(), false, $event->getMessageData());
+            });
         }
+    }
+
+    /** {@inheritDoc} */
+    public function provides()
+    {
+        return ['mailer', 'mandra.decorators', 'mandra.log.writers', 'mandra.logger.filesystem', 'mandra.logger'];
     }
 }

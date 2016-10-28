@@ -19,8 +19,8 @@ class LinkTracker implements Decorator
         $body           = $message->getSwiftMessage()->getBody();
 
         foreach (["'", '"'] as $quote) {
-            $body = preg_replace_callback("/href=\\{$quote}(.*)\\{$quote}/", function ($matches) use ($trackerLink, $trackerLinkKey) {
-                return strtr($trackerLink, [$trackerLinkKey => rawurlencode($matches[1])]);
+            $body = preg_replace_callback("/href=\\{$quote}([^\\{$quote}]*)\\{$quote}/", function ($matches) use ($trackerLink, $trackerLinkKey, $quote) {
+                return "href={$quote}".strtr($trackerLink, [$trackerLinkKey => rawurlencode($matches[1])])."{$quote}";
             }, $body);
         }
 
