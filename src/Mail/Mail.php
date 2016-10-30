@@ -15,6 +15,8 @@ abstract class Mail extends Mailable
     /** @var array */
     protected $logData;
 
+    public function __construct() { }
+
     /** @return string */
     public function getSubject()
     {
