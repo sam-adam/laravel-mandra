@@ -56,7 +56,7 @@ class LinkTracker implements Decorator
             ':originalLink'   => rawurlencode($originalLink),
             ':messageId'      => $message->getId(),
             ':messageType'    => $message->getKey(),
-            ':messageTo'      => implode(',', array_keys($message->getSwiftMessage()->getTo())),
+            ':messageTo'      => implode(',', array_keys($message->getSwiftMessage()->getTo() ?: [])),
             ':messageSubject' => $message->getSwiftMessage()->getSubject(),
         ]);
     }

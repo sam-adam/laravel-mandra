@@ -72,6 +72,12 @@ class Mailer extends BaseMailer
             $message->to($this->to['address'], $this->to['name'], true);
         }
 
+        $this->originalBody = $message->getSwiftMessage()->getBody();
+
+        foreach ($this->decorators as $decorator) {
+            $decorator->decorate($message, $data);
+        }
+
         try {
             $this->sendSwiftMessage($message->getSwiftMessage());
 
@@ -95,11 +101,5 @@ class Mailer extends BaseMailer
         parent::addContent($message, $view, $plain, $raw, $data);
 
         $message->setKey(str_replace('/', '.', $view));
-
-        $this->originalBody = $message->getSwiftMessage()->getBody();
-
-        foreach ($this->decorators as $decorator) {
-            $decorator->decorate($message, $data);
-        }
     }
 }
