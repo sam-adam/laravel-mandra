@@ -25,10 +25,15 @@ class LinkTracker implements Decorator
         }
 
         foreach (["'", '"'] as $quote) {
-            $body = preg_replace_callback("/href=\\{$quote}([^\\{$quote}]*)\\{$quote}/", function ($matches) use ($trackerLink, $trackerLinkKey, $quote, $campaignParams) {
-                $url = MessageHelper::buildUrl($matches[1], $campaignParams);
+            $body = preg_replace_callback("/href=\\{$quote}([^\\{$quote}]*)\\{$quote}/", function ($matches) use ($trackerLink, $trackerLinkKey, $quote, $campaignParams, $message) {
+                if (strpos($matches[1], 'mailto') === 0) {
+                    return $matches[0];
+                }
 
-                return "href={$quote}".strtr($trackerLink, [$trackerLinkKey => rawurlencode($url)])."{$quote}";
+                $url        = MessageHelper::buildUrl($matches[1], $campaignParams + ['i' => $message->getId()]);
+                $trackerUrl = strtr($trackerLink, [$trackerLinkKey => rawurlencode($url)]);
+
+                return "href={$quote}".url($trackerUrl)."{$quote}";
             }, $body);
         }
 

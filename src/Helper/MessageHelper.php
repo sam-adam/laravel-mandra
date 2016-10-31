@@ -27,18 +27,12 @@ class MessageHelper
 
         parse_str(data_get($baseUrlParts, 'query', ''), $baseUrlQueries);
 
-        foreach ($queries as $queryString) {
-            if (is_object($queryString)) {
+        foreach ($queries as $key => $value) {
+            if (is_object($value)) {
                 continue;
             }
 
-            if (!is_array($queryString)) {
-                $baseUrlQueries[$queryString] = $queryString;
-            } else {
-                $queryString = array_flatten($queryString);
-
-                $baseUrlQueries = array_merge($baseUrlQueries, $queryString);
-            }
+            $baseUrlQueries[$key] = $value;
         }
 
         $baseUrlParts['query'] = http_build_query($baseUrlQueries);
