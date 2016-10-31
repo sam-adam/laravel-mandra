@@ -2,7 +2,6 @@
 
 namespace LaravelMandra;
 
-use Illuminate\Log\Writer;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Mail\MailServiceProvider as BaseServiceProvider;
@@ -10,6 +9,7 @@ use LaravelMandra\Decorators\Decorator;
 use LaravelMandra\Mail\Events\MessageSendingFailed;
 use LaravelMandra\Mail\Events\MessageSent;
 use LaravelMandra\Mail\Log\Logger;
+use LaravelMandra\Mail\Log\LogWriter;
 use LaravelMandra\Mail\Mailer;
 
 /**
@@ -49,11 +49,11 @@ class ServiceProvider extends BaseServiceProvider
         $this->app->bind('mandra.log.writers', function ($app) {
             $writers = [];
 
-            /** @var Writer $writer */
+            /** @var LogWriter $writer */
             foreach ($app['config']['mandra.logging.writers'] as $writer) {
                 $interfaces = class_implements($writer);
 
-                if (is_array($interfaces) && in_array(Writer::class, $interfaces)) {
+                if (is_array($interfaces) && in_array(LogWriter::class, $interfaces)) {
                     array_push($writers, $app->make($writer));
                 }
             }
