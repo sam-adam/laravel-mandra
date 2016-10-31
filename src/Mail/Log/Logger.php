@@ -42,7 +42,7 @@ class Logger
     {
         $messageMeta = $this->buildMessageMeta($message);
 
-        if (isset($message['logData'])) {
+        if (isset($messageData['logData'])) {
             $messageMeta = array_merge($messageMeta['logData'], $messageMeta);
         }
 
