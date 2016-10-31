@@ -23,17 +23,23 @@ return [
      | -. clickTracker
      |    Will replace all element's 'href' value with clickTracker.link value (clickTracker.link should contain clickTracker.key as placeholder), example:
      |      'clickTracker' => [
-     |           'link' => 'http://www.clickTracker.com/originalUrl=:originalLink',
-     |           'key'  => ':originalLink'
+     |           'link' => 'http://www.clickTracker.com/originalUrl=:originalLink?id=:messageId'
      |       ],
+     |       ...
+     |
+     |    Available placeholders:
+     |      ':originalLink':   The original url
+     |      ':messageTo':      Comma separated message recipients
+     |      ':messageId':      Message unique id
+     |      ':messageSubject': Message subject
+     |      ':messageType':    Message type
      |
      | -. pixelTracker
      |    Appends a <img> element with src defined in pixelTracker.url
      |
      */
     'clickTracker' => [
-        'link' => '',
-        'key'  => ':originalLink'
+        'link' => ''
     ],
     'pixelTracker' => [
         'url'      => ''
