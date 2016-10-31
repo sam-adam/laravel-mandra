@@ -2,3 +2,7 @@
 .git
 composer.lock
 vendor
+bootstrap/cache/
+.env.*.php
+.env.php
+.env
