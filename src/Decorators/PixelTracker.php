@@ -2,7 +2,7 @@
 
 namespace LaravelMandra\Decorators;
 
-use LaravelMandra\Helper\UrlBuilder;
+use LaravelMandra\Helper\MessageHelper;
 use LaravelMandra\Mail\Message;
 
 /**
@@ -15,10 +15,14 @@ class PixelTracker implements Decorator
     /** {@inheritDoc} */
     public function decorate(Message $message, $data)
     {
-        $loggedParams = config('mandra.pixelTracker.dataKeys');
-        $body         = $message->getSwiftMessage()->getBody();
-        $url          = UrlBuilder::buildUrl(url(config('mandra.pixelTracker.url')), $data + ['param' => '1'], array_merge($loggedParams, ['param']));
+        $body           = $message->getSwiftMessage()->getBody();
+        $campaignParams = MessageHelper::buildCampaignParams($message);
 
+        if (isset($data['utms'])) {
+            $campaignParams = array_merge($data['utms'], $campaignParams);
+        }
+
+        $url = MessageHelper::buildUrl(url(config('mandra.pixelTracker.url')), $campaignParams);
         $img = "<img src='{$url}' id='pixtrck' />";
 
         if (strpos($body, '</body>') !== false) {

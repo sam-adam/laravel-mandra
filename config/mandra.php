@@ -33,16 +33,10 @@ return [
      */
     'clickTracker' => [
         'link' => '',
-        'key'  => ':originalLink',
-        'dataKeys' => [
-            'utms'
-        ]
+        'key'  => ':originalLink'
     ],
     'pixelTracker' => [
-        'url'      => '',
-        'dataKeys' => [
-            'utms'
-        ]
+        'url'      => ''
     ],
 
     /*

@@ -40,12 +40,18 @@ class Logger
      */
     public function log(Message $message, Mailer $mailer, $result, array $messageData = [])
     {
+        $messageMeta = $this->buildMessageMeta($message);
+
+        if (isset($message['logData'])) {
+            $messageMeta = array_merge($messageMeta['logData'], $messageMeta);
+        }
+
         if ($this->doLogContent && $this->filesystem) {
             $this->logContent($message);
         }
 
         foreach ($this->logWriters as $logWriter) {
-            $logWriter->writeLog($message, $mailer, $result, $messageData);
+            $logWriter->writeLog($message, $mailer, $result, $messageMeta);
         }
     }
 
@@ -70,5 +76,26 @@ class Logger
         $this->filesystem->put($dateNamespace.'/'.$filename, $stream);
 
         fclose($stream);
+    }
+
+    /**
+     * Build message meta for logging
+     *
+     * @param Message $message
+     *
+     * @return array
+     */
+    protected function buildMessageMeta(Message $message)
+    {
+        return [
+            'mail_type'     => $message->getKey(),
+            'project'       => config('app.name'),
+            'is_production' => app()->environment() == 'production' ? 1 : 0,
+            'is_loggable'   => true,
+            'to'            => $message->getSwiftMessage()->getTo(),
+            'subject'       => $message->getSwiftMessage()->getSubject(),
+            'cc'            => $message->getSwiftMessage()->getCc(),
+            'reply_to'      => $message->getSwiftMessage()->getReplyTo()
+        ];
     }
 }
