@@ -86,8 +86,10 @@ class Mailer extends BaseMailer
             }
         } catch (\Exception $ex) {
             if ($this->events) {
-                $this->events->fire(new Events\MessageSendingFailed($message, $this, $data));
+                $this->events->fire(new Events\MessageSendingFailed($message, $this, $data, $ex));
             }
+
+            throw $ex;
         }
     }
 

@@ -17,9 +17,10 @@ class ApplicationWriter implements LogWriter
     /** {@inheritDoc} */
     public function writeLog(Message $message, Mailer $mailer, $result, array $messageData = [])
     {
-        $logContent = '[MailSend][Mailer: :mailer][Subject: :subject][Result: success][Recipients: :recipients][CC: :ccs]';
+        $logContent = '[MailSend][Mailer: :mailer][Subject: :subject][Result: :result][Recipients: :recipients][CC: :ccs]';
 
         Log::info(strtr($logContent, [
+            ':result'     => $result ? 'Success' : 'Failed',
             ':mailer'     => $this->getMailerString($mailer),
             ':subject'    => $message->getSwiftMessage()->getSubject(),
             ':recipients' => json_encode($message->getSwiftMessage()->getTo()),

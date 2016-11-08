@@ -21,12 +21,21 @@ class MessageSendingFailed
     protected $mailer;
     /** @var array */
     protected $messageData;
+    /** @var \Exception */
+    protected $exception;
 
-    public function __construct(Message $message, Mailer $mailer, array $messageData = [])
+    public function __construct(Message $message, Mailer $mailer, array $messageData = [], \Exception $exception = null)
     {
         $this->message     = $message;
         $this->mailer      = $mailer;
         $this->messageData = $messageData;
+        $this->exception   = $exception;
+    }
+
+    /** @return \Exception */
+    public function getException()
+    {
+        return $this->exception;
     }
 
     /** @return Mailer */
